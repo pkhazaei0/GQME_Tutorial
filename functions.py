@@ -1,3 +1,5 @@
+#import libraries
+
 import sys, os
 
 import numpy as np
@@ -12,7 +14,10 @@ import matplotlib as mpl
 
 mpl.style.use('classic')
 
-### setting parameter string GQME ###
+###############################################################################
+# You will need to change the following constants to be consistent with those #
+# in sections 3 and 4 of GQME.ipynb                                           #
+###############################################################################
 
 # general constants
 TIME_STEPS = 2000 # number of time steps
@@ -62,21 +67,6 @@ elif MODEL_NUM == 6:
 PARAM_STR = "_Spin-Boson_Ohmic_TT-TFD_b%sG%s_e%s_t%.8f_"%(BETA, GAMMA_DA, EPSILON, DT)
 PARAM_STR += "xi%swc%s_wmax%s_dofn%s_tf%.4f"%(XI, OMEGA_C, OMEGA_MAX, DOF_N, FINAL_TIME)
 
-### specific constants to the memory kernel code ###
-MEM_TIME = DT * TIME_STEPS # Either the memory time for straight calculation or
-# for convergence
-MEM_TIMESTEPS = int(MEM_TIME/DT)
-FINAL_TIME_GQME = MEM_TIME + DT
-FINAL_TIMESTEPS = int(FINAL_TIME/DT)
-
-### setting parameter string GQME ###
-PARAM_STR_GQME = PARAM_STR + "_mt%.4f_finalt%.4f"%(MEM_TIME, FINAL_TIME_GQME)
-
-### variables ###
-timeVec = np.arange(0, FINAL_TIMESTEPS * DT, DT)
-
-
-
 GQME_TYPE = "SingleState"
 # type of reduced (or full) GQME.
 # options: Full, PopulationsOnly, SingleState, SubsetStates
@@ -85,6 +75,10 @@ STATES = ["11"]
 # necessary to set this for Full or PopulationsOnly because the code is designed
 # to create the right arrays for those automatically.
 INITIAL_STATE = "00" # initial state
+
+###############################################################################
+# The rest can remain unchanged                                               #
+###############################################################################
 
 ### setting the number of states and array of states strings based on the
 ### GQME_TYPE
@@ -128,6 +122,19 @@ elif GQME_TYPE == "SingleState":
 else:
     print("ERROR: GQME_TYPE not Full, PopulationsOnly, SubsetStates, or SingleState.")
 
+
+### specific constants to the memory kernel code ###
+MEM_TIME = DT * TIME_STEPS # Either the memory time for straight calculation or
+# for convergence
+MEM_TIMESTEPS = int(MEM_TIME/DT)
+FINAL_TIME_GQME = MEM_TIME + DT
+FINAL_TIMESTEPS = int(FINAL_TIME/DT)
+
+### setting parameter string GQME ###
+PARAM_STR_GQME = PARAM_STR + "_mt%.4f_finalt%.4f"%(MEM_TIME, FINAL_TIME_GQME)
+
+### variables ###
+timeVec = np.arange(0, FINAL_TIMESTEPS * DT, DT)
 
 
 def printTime(outputTime):
